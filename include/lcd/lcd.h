@@ -26,28 +26,6 @@ typedef unsigned char u8;
 typedef unsigned int u16;
 typedef unsigned long u32;
 
-// -------------------------------Transcription---------------------------
-#define UBYTE uint8_t
-#define UWORD uint16_t
-#define UDOUBLE uint32_t
-#define DEV_CS_PIN GPIO_PIN_2
-#define DEV_RST_PIN GPIO_PIN_1
-#define DEV_DC_PIN GPIO_PIN_0
-
-#define DEV_SPI_WRITE(_dat) LCD_Writ_Bus(_dat)
-#define DEV_Delay_ms(__xms) delay_1ms(__xms)
-#define DEV_Digital_Write(_pin, _value) (_value ? gpio_bit_set(GPIOB, _pin) : gpio_bit_reset(GPIOB, _pin))
-#define DEV_Digital_Read(_pin) gpio_input_bit_get(GPIO_B, _pin)
-void LCD_WriteData_Byte(UBYTE da);
-void LCD_WriteData_Word(UWORD da);
-void LCD_WriteReg(UBYTE da);
-
-void LCD_SetCursor(UWORD x1, UWORD y1, UWORD x2, UWORD y2);
-void LCD_SetUWORD(UWORD x, UWORD y, UWORD Color);
-void LCD_ClearWindow(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD UWORD);
-
-// -------------------------------End transcription---------------------------
-
 // #define LED_ON gpio_bit_reset(GPIOC,GPIO_PIN_13)
 // #define LED_OFF gpio_bit_set(GPIOC,GPIO_PIN_13)
 

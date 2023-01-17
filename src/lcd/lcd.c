@@ -77,40 +77,39 @@ void LCD_WR_REG(u8 dat) {
        Return value: None
 ******************************************************************************/
 void LCD_Address_Set(u16 x1, u16 y1, u16 x2, u16 y2) {
-    LCD_SetCursor(x1, y1, x2, y2);
-    // if (USE_HORIZONTAL == 0) {
-    //     LCD_WR_REG(0x2a);  // Column address settings
-    //     LCD_WR_DATA(x1 + 26);
-    //     LCD_WR_DATA(x2 + 26);
-    //     LCD_WR_REG(0x2b);  // Row address setting
-    //     LCD_WR_DATA(y1 + 1);
-    //     LCD_WR_DATA(y2 + 1);
-    //     LCD_WR_REG(0x2c);  // Memory write
-    // } else if (USE_HORIZONTAL == 1) {
-    //     LCD_WR_REG(0x2a);  // Column address settings
-    //     LCD_WR_DATA(x1 + 26);
-    //     LCD_WR_DATA(x2 + 26);
-    //     LCD_WR_REG(0x2b);  // Row address setting
-    //     LCD_WR_DATA(y1 + 1);
-    //     LCD_WR_DATA(y2 + 1);
-    //     LCD_WR_REG(0x2c);  // Memory write
-    // } else if (USE_HORIZONTAL == 2) {
-    //     LCD_WR_REG(0x2a);  // Column address settings
-    //     LCD_WR_DATA(x1 + 1);
-    //     LCD_WR_DATA(x2 + 1);
-    //     LCD_WR_REG(0x2b);  // Row address setting
-    //     LCD_WR_DATA(y1 + 26);
-    //     LCD_WR_DATA(y2 + 26);
-    //     LCD_WR_REG(0x2c);  // Memory write
-    // } else {
-    //     LCD_WR_REG(0x2a);  // Column address settings
-    //     LCD_WR_DATA(x1 + 1);
-    //     LCD_WR_DATA(x2 + 1);
-    //     LCD_WR_REG(0x2b);  // Row address setting
-    //     LCD_WR_DATA(y1 + 26);
-    //     LCD_WR_DATA(y2 + 26);
-    //     LCD_WR_REG(0x2c);  // Memory write
-    // }
+    if (USE_HORIZONTAL == 0) {
+        LCD_WR_REG(0x2a);
+        LCD_WR_DATA(x1 + 53);
+        LCD_WR_DATA(x2 + 53);
+        LCD_WR_REG(0x2b);
+        LCD_WR_DATA(y1 + 40);
+        LCD_WR_DATA(y2 + 40);
+        LCD_WR_REG(0x2C);
+    } else if (USE_HORIZONTAL == 1) {
+        LCD_WR_REG(0x2a);
+        LCD_WR_DATA(x1 + 53);
+        LCD_WR_DATA(x2 + 53);
+        LCD_WR_REG(0x2b);
+        LCD_WR_DATA(y1 + 40);
+        LCD_WR_DATA(y2 + 40);
+        LCD_WR_REG(0x2C);
+    } else if (USE_HORIZONTAL == 2) {
+        LCD_WR_REG(0x2a);
+        LCD_WR_DATA(x1 + 40);
+        LCD_WR_DATA(x2 + 40);
+        LCD_WR_REG(0x2b);
+        LCD_WR_DATA(y1 + 52);
+        LCD_WR_DATA(y2 + 52);
+        LCD_WR_REG(0x2C);
+    } else {
+        LCD_WR_REG(0x2a);
+        LCD_WR_DATA(x1 + 40);
+        LCD_WR_DATA(x2 + 40);
+        LCD_WR_REG(0x2b);
+        LCD_WR_DATA(y1 + 53);
+        LCD_WR_DATA(y2 + 53);
+        LCD_WR_REG(0x2C);
+    }
 }
 
 #if SPI0_CFG == 2
@@ -141,94 +140,7 @@ void dma_config(void) {
     dma_circulation_disable(DMA0, DMA_CH2);
     dma_memory_to_memory_disable(DMA0, DMA_CH2);
 }
-#endif
-
-// -------------------------------Transcription---------------------------
-
-void LCD_WriteData_Byte(UBYTE da) {
-    DEV_Digital_Write(DEV_CS_PIN, 0);
-    DEV_Digital_Write(DEV_DC_PIN, 1);
-    DEV_SPI_WRITE(da);
-    DEV_Digital_Write(DEV_CS_PIN, 1);
-}
-
-void LCD_WriteData_Word(UWORD da) {
-    UBYTE i = (da >> 8) & 0xff;
-    DEV_Digital_Write(DEV_CS_PIN, 0);
-    DEV_Digital_Write(DEV_DC_PIN, 1);
-    DEV_SPI_WRITE(i);
-    DEV_SPI_WRITE(da);
-    DEV_Digital_Write(DEV_CS_PIN, 1);
-}
-
-void LCD_WriteReg(UBYTE da) {
-    DEV_Digital_Write(DEV_CS_PIN, 0);
-    DEV_Digital_Write(DEV_DC_PIN, 0);
-    DEV_SPI_WRITE(da);
-    DEV_Digital_Write(DEV_CS_PIN, 1);
-}
-
-void LCD_SetCursor(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend) {
-    if (USE_HORIZONTAL == 0) {
-        LCD_WriteReg(0x2a);
-        LCD_WriteData_Word(Xstart + 53);
-        LCD_WriteData_Word(Xend + 53);
-        LCD_WriteReg(0x2b);
-        LCD_WriteData_Word(Ystart + 40);
-        LCD_WriteData_Word(Yend + 40);
-        LCD_WriteReg(0x2C);
-    } else if (USE_HORIZONTAL == 1) {
-        LCD_WriteReg(0x2a);
-        LCD_WriteData_Word(Xstart + 53);
-        LCD_WriteData_Word(Xend + 53);
-        LCD_WriteReg(0x2b);
-        LCD_WriteData_Word(Ystart + 40);
-        LCD_WriteData_Word(Yend + 40);
-        LCD_WriteReg(0x2C);
-    } else if (USE_HORIZONTAL == 2) {
-        LCD_WriteReg(0x2a);
-        LCD_WriteData_Word(Xstart + 40);
-        LCD_WriteData_Word(Xend + 40);
-        LCD_WriteReg(0x2b);
-        LCD_WriteData_Word(Ystart + 53);
-        LCD_WriteData_Word(Yend + 53);
-        LCD_WriteReg(0x2C);
-    } else {
-        LCD_WriteReg(0x2a);
-        LCD_WriteData_Word(Xstart + 40);
-        LCD_WriteData_Word(Xend + 40);
-        LCD_WriteReg(0x2b);
-        LCD_WriteData_Word(Ystart + 53);
-        LCD_WriteData_Word(Yend + 53);
-        LCD_WriteReg(0x2C);
-    }
-}
-
-void LCD_SetUWORD(UWORD x, UWORD y, UWORD Color) {
-    LCD_SetCursor(x, y, x, y);
-    LCD_WriteData_Word(Color);
-}
-
-void LCD_ClearWindow(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend, UWORD color) {
-    UWORD i, j;
-    LCD_SetCursor(Xstart, Ystart, Xend - 1, Yend - 1);
-    for (i = Ystart; i <= Yend - 1; i++) {
-        for (j = Xstart; j <= Xend - 1; j++) {
-            LCD_WriteData_Word(color);
-        }
-    }
-}
-
-static void LCD_Reset(void) {
-    DEV_Digital_Write(DEV_RST_PIN, 0);
-    DEV_Delay_ms(20);
-    DEV_Digital_Write(DEV_RST_PIN, 0);
-    DEV_Delay_ms(20);
-    DEV_Digital_Write(DEV_RST_PIN, 1);
-    DEV_Delay_ms(20);
-}
-
-// -------------------------End Transcription---------------------------
+#endif /* SPI0_CFG == 2 */
 
 #if SPI0_CFG == 1
 /*!
@@ -256,7 +168,7 @@ void spi_config(void) {
     spi_crc_polynomial_set(SPI0, 7);
     spi_enable(SPI0);
 }
-#endif
+#endif /* SPI0_CFG == 1 */
 
 /******************************************************************************
        Function description: LCD initialization function
@@ -299,193 +211,106 @@ void Lcd_Init(void) {
     gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0 | GPIO_PIN_1);
     gpio_bit_reset(GPIOB, GPIO_PIN_0 | GPIO_PIN_1);
 
-    // OLED_RST_Clr();
-    // delay_1ms(200);
-    // OLED_RST_Set();
-    // delay_1ms(20);
-    // OLED_BLK_Set();
-
-    // LCD_WR_REG(0x11);  // turn off sleep mode
-    // delay_1ms(100);
-
-    // LCD_WR_REG(0x21);  // display inversion mode
-
-    // LCD_WR_REG(0xB1);    // Set the frame frequency of the full colors normal mode
-    //                      // Frame rate=fosc/((RTNA x 2 + 40) x (LINE + FPA + BPA +2))
-    //                      // fosc = 850kHz
-    // LCD_WR_DATA8(0x05);  // RTNA
-    // LCD_WR_DATA8(0x3A);  // FPA
-    // LCD_WR_DATA8(0x3A);  // BPA
-
-    // LCD_WR_REG(0xB2);    // Set the frame frequency of the Idle mode
-    //                      // Frame rate=fosc/((RTNB x 2 + 40) x (LINE + FPB + BPB +2))
-    //                      // fosc = 850kHz
-    // LCD_WR_DATA8(0x05);  // RTNB
-    // LCD_WR_DATA8(0x3A);  // FPB
-    // LCD_WR_DATA8(0x3A);  // BPB
-
-    // LCD_WR_REG(0xB3);  // Set the frame frequency of the Partial mode/ full colors
-    // LCD_WR_DATA8(0x05);
-    // LCD_WR_DATA8(0x3A);
-    // LCD_WR_DATA8(0x3A);
-    // LCD_WR_DATA8(0x05);
-    // LCD_WR_DATA8(0x3A);
-    // LCD_WR_DATA8(0x3A);
-
-    // LCD_WR_REG(0xB4);
-    // LCD_WR_DATA8(0x03);
-
-    // LCD_WR_REG(0xC0);
-    // LCD_WR_DATA8(0x62);
-    // LCD_WR_DATA8(0x02);
-    // LCD_WR_DATA8(0x04);
-
-    // LCD_WR_REG(0xC1);
-    // LCD_WR_DATA8(0xC0);
-
-    // LCD_WR_REG(0xC2);
-    // LCD_WR_DATA8(0x0D);
-    // LCD_WR_DATA8(0x00);
-
-    // LCD_WR_REG(0xC3);
-    // LCD_WR_DATA8(0x8D);
-    // LCD_WR_DATA8(0x6A);
-
-    // LCD_WR_REG(0xC4);
-    // LCD_WR_DATA8(0x8D);
-    // LCD_WR_DATA8(0xEE);
-
-    // LCD_WR_REG(0xC5); /*VCOM*/
-    // LCD_WR_DATA8(0x0E);
-
-    // LCD_WR_REG(0xE0);
-    // LCD_WR_DATA8(0x10);
-    // LCD_WR_DATA8(0x0E);
-    // LCD_WR_DATA8(0x02);
-    // LCD_WR_DATA8(0x03);
-    // LCD_WR_DATA8(0x0E);
-    // LCD_WR_DATA8(0x07);
-    // LCD_WR_DATA8(0x02);
-    // LCD_WR_DATA8(0x07);
-    // LCD_WR_DATA8(0x0A);
-    // LCD_WR_DATA8(0x12);
-    // LCD_WR_DATA8(0x27);
-    // LCD_WR_DATA8(0x37);
-    // LCD_WR_DATA8(0x00);
-    // LCD_WR_DATA8(0x0D);
-    // LCD_WR_DATA8(0x0E);
-    // LCD_WR_DATA8(0x10);
-
-    // LCD_WR_REG(0xE1);
-    // LCD_WR_DATA8(0x10);
-    // LCD_WR_DATA8(0x0E);
-    // LCD_WR_DATA8(0x03);
-    // LCD_WR_DATA8(0x03);
-    // LCD_WR_DATA8(0x0F);
-    // LCD_WR_DATA8(0x06);
-    // LCD_WR_DATA8(0x02);
-    // LCD_WR_DATA8(0x08);
-    // LCD_WR_DATA8(0x0A);
-    // LCD_WR_DATA8(0x13);
-    // LCD_WR_DATA8(0x26);
-    // LCD_WR_DATA8(0x36);
-    // LCD_WR_DATA8(0x00);
-    // LCD_WR_DATA8(0x0D);
-    // LCD_WR_DATA8(0x0E);
-    // LCD_WR_DATA8(0x10);
-
-    // LCD_WR_REG(0x3A);    // define the format of RGB picture data
-    // LCD_WR_DATA8(0x05);  // 16-bit/pixel
-
-    // LCD_WR_REG(0x36);
-    // if (USE_HORIZONTAL == 0)
-    //     LCD_WR_DATA8(0x08);
-    // else if (USE_HORIZONTAL == 1)
-    //     LCD_WR_DATA8(0xC8);
-    // else if (USE_HORIZONTAL == 2)
-    //     LCD_WR_DATA8(0x78);
-    // else
-    //     LCD_WR_DATA8(0xA8);
-    // LCD_WR_REG(0x29);  // Display On
-
-    LCD_Reset();
+    OLED_RST_Clr();
+    delay_1ms(200);
+    OLED_RST_Set();
+    delay_1ms(20);
+    OLED_BLK_Set();
 
     //************* Start Initial Sequence **********//
-    LCD_WriteReg(0x36);
-    LCD_WriteData_Byte(0x70);
+    LCD_WR_REG(0x36);  // Screen routation
+    if (USE_HORIZONTAL == 0)
+        LCD_WR_DATA8(0xC0);
+    else if (USE_HORIZONTAL == 1)
+        LCD_WR_DATA8(0x00);
+    else if (USE_HORIZONTAL == 2)
+        LCD_WR_DATA8(0xA0);
+    else
+        LCD_WR_DATA8(0x70);
+    /*
+    Bit D7
+    0：页显示从顶部往底部
+    1：页显示从底部往顶部
+    Bit D6
+    0：纵向显示从左往右
+    1：纵向显示从右往左
+    Bit D5
+    0：正常显示
+    1：翻转显示
+    */
 
-    LCD_WriteReg(0x3A);
-    LCD_WriteData_Byte(0x05);
+    LCD_WR_REG(0x3A);  // 65K color
+    LCD_WR_DATA8(0x05);
 
-    LCD_WriteReg(0xB2);
-    LCD_WriteData_Byte(0x0C);
-    LCD_WriteData_Byte(0x0C);
-    LCD_WriteData_Byte(0x00);
-    LCD_WriteData_Byte(0x33);
-    LCD_WriteData_Byte(0x33);
+    LCD_WR_REG(0xB2);
+    LCD_WR_DATA8(0x0C);
+    LCD_WR_DATA8(0x0C);
+    LCD_WR_DATA8(0x00);
+    LCD_WR_DATA8(0x33);
+    LCD_WR_DATA8(0x33);
 
-    LCD_WriteReg(0xB7);
-    LCD_WriteData_Byte(0x35);
+    LCD_WR_REG(0xB7);
+    LCD_WR_DATA8(0x35);
 
-    LCD_WriteReg(0xBB);
-    LCD_WriteData_Byte(0x19);
+    LCD_WR_REG(0xBB);
+    LCD_WR_DATA8(0x19);
 
-    LCD_WriteReg(0xC0);
-    LCD_WriteData_Byte(0x2C);
+    LCD_WR_REG(0xC0);  // Power control
+    LCD_WR_DATA8(0x2C);
 
-    LCD_WriteReg(0xC2);
-    LCD_WriteData_Byte(0x01);
+    LCD_WR_REG(0xC2);
+    LCD_WR_DATA8(0x01);
 
-    LCD_WriteReg(0xC3);
-    LCD_WriteData_Byte(0x12);
+    LCD_WR_REG(0xC3);
+    LCD_WR_DATA8(0x12);
 
-    LCD_WriteReg(0xC4);
-    LCD_WriteData_Byte(0x20);
+    LCD_WR_REG(0xC4);
+    LCD_WR_DATA8(0x20);
 
-    LCD_WriteReg(0xC6);
-    LCD_WriteData_Byte(0x0F);
+    LCD_WR_REG(0xC6);
+    LCD_WR_DATA8(0x0F);
 
-    LCD_WriteReg(0xD0);
-    LCD_WriteData_Byte(0xA4);
-    LCD_WriteData_Byte(0xA1);
+    LCD_WR_REG(0xD0);
+    LCD_WR_DATA8(0xA4);
+    LCD_WR_DATA8(0xA1);
 
-    LCD_WriteReg(0xE0);
-    LCD_WriteData_Byte(0xD0);
-    LCD_WriteData_Byte(0x04);
-    LCD_WriteData_Byte(0x0D);
-    LCD_WriteData_Byte(0x11);
-    LCD_WriteData_Byte(0x13);
-    LCD_WriteData_Byte(0x2B);
-    LCD_WriteData_Byte(0x3F);
-    LCD_WriteData_Byte(0x54);
-    LCD_WriteData_Byte(0x4C);
-    LCD_WriteData_Byte(0x18);
-    LCD_WriteData_Byte(0x0D);
-    LCD_WriteData_Byte(0x0B);
-    LCD_WriteData_Byte(0x1F);
-    LCD_WriteData_Byte(0x23);
+    LCD_WR_REG(0xE0);  // Gamma
+    LCD_WR_DATA8(0xD0);
+    LCD_WR_DATA8(0x04);
+    LCD_WR_DATA8(0x0D);
+    LCD_WR_DATA8(0x11);
+    LCD_WR_DATA8(0x13);
+    LCD_WR_DATA8(0x2B);
+    LCD_WR_DATA8(0x3F);
+    LCD_WR_DATA8(0x54);
+    LCD_WR_DATA8(0x4C);
+    LCD_WR_DATA8(0x18);
+    LCD_WR_DATA8(0x0D);
+    LCD_WR_DATA8(0x0B);
+    LCD_WR_DATA8(0x1F);
+    LCD_WR_DATA8(0x23);
 
-    LCD_WriteReg(0xE1);
-    LCD_WriteData_Byte(0xD0);
-    LCD_WriteData_Byte(0x04);
-    LCD_WriteData_Byte(0x0C);
-    LCD_WriteData_Byte(0x11);
-    LCD_WriteData_Byte(0x13);
-    LCD_WriteData_Byte(0x2C);
-    LCD_WriteData_Byte(0x3F);
-    LCD_WriteData_Byte(0x44);
-    LCD_WriteData_Byte(0x51);
-    LCD_WriteData_Byte(0x2F);
-    LCD_WriteData_Byte(0x1F);
-    LCD_WriteData_Byte(0x1F);
-    LCD_WriteData_Byte(0x20);
-    LCD_WriteData_Byte(0x23);
+    LCD_WR_REG(0xE1);
+    LCD_WR_DATA8(0xD0);
+    LCD_WR_DATA8(0x04);
+    LCD_WR_DATA8(0x0C);
+    LCD_WR_DATA8(0x11);
+    LCD_WR_DATA8(0x13);
+    LCD_WR_DATA8(0x2C);
+    LCD_WR_DATA8(0x3F);
+    LCD_WR_DATA8(0x44);
+    LCD_WR_DATA8(0x51);
+    LCD_WR_DATA8(0x2F);
+    LCD_WR_DATA8(0x1F);
+    LCD_WR_DATA8(0x1F);
+    LCD_WR_DATA8(0x20);
+    LCD_WR_DATA8(0x23);
 
-    LCD_WriteReg(0x21);
+    LCD_WR_REG(0x21);  // Display inversion
 
-    LCD_WriteReg(0x11);
+    LCD_WR_REG(0x11);
 
-    LCD_WriteReg(0x29);
+    LCD_WR_REG(0x29);  // Display on
 }
 
 /******************************************************************************
@@ -501,11 +326,11 @@ void LCD_Clear(u16 Color) {
     //         LCD_WR_DATA(Color);
     //     }
     // }
-    UWORD i, j;
-    LCD_SetCursor(0, 0, LCD_W - 1, LCD_H - 1);
+    u16 i, j;
+    LCD_Address_Set(0, 0, LCD_W - 1, LCD_H - 1);
     for (i = 0; i < LCD_W; i++) {
         for (j = 0; j < LCD_H; j++) {
-            LCD_WriteData_Word(Color);
+            LCD_WR_DATA(Color);
         }
     }
 }
@@ -564,14 +389,14 @@ void LCD_DrawPoint_big(u16 x, u16 y, u16 color) {
 /******************************************************************************
        Function description: fill color in the specified area
        Entry data: xsta, ysta starting coordinates
-                   xend, yend termination coordinates
+                   x2, y2 termination coordinates
        Return value: None
 ******************************************************************************/
-void LCD_Fill(u16 xsta, u16 ysta, u16 xend, u16 yend, u16 color) {
+void LCD_Fill(u16 xsta, u16 ysta, u16 x2, u16 y2, u16 color) {
     u16 i, j;
-    LCD_Address_Set(xsta, ysta, xend, yend);  // 设置光标位置
-    for (i = ysta; i <= yend; i++) {
-        for (j = xsta; j <= xend; j++) LCD_WR_DATA(color);  // 设置光标位置
+    LCD_Address_Set(xsta, ysta, x2, y2);  // 设置光标位置
+    for (i = ysta; i <= y2; i++) {
+        for (j = xsta; j <= x2; j++) LCD_WR_DATA(color);  // 设置光标位置
     }
 }
 
