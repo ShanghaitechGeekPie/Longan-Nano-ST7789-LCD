@@ -36,7 +36,7 @@ typedef unsigned long u32;
 // #define SPI0_CFG 2  //hardware spi dma
 // #define SPI0_CFG 3  //software spi
 
-#define FRAME_SIZE 25600
+#define FRAME_SIZE 43200 // This is for DMA mode only
 
 //-----------------OLED端口定义----------------
 #if SPI0_CFG == 1
@@ -86,7 +86,7 @@ typedef unsigned long u32;
 #define OLED_DATA 1  // Write data
 
 extern u16 BACK_COLOR;  // Background color
-extern unsigned char image[12800];
+extern unsigned char image[21440];
 
 void LCD_Writ_Bus(u8 dat);
 void LCD_WR_DATA8(u8 dat);

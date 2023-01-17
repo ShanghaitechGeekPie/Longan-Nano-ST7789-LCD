@@ -3,7 +3,7 @@
 #include "fatfs/tf_card.h"
 #include "lcd/lcd.h"
 
-unsigned char image[12800];
+unsigned char image[21440];
 FATFS fs;
 
 void init_uart0(void) {
@@ -55,45 +55,51 @@ int main(void) {
     LEDB(1);
 
     fr = f_mount(&fs, "", 1);
-    if (fr == 0)
+    if (fr == 0) {
         mount_is_ok = 0;
-    else
+        LCD_ShowString(24, 0, (u8 *)("card found!"), BLACK);
+        delay_1ms(1000);
+        LCD_ShowString(24, 0, (u8 *)("Loading!"), BLUE);
+        delay_1ms(1000);
+        LCD_Clear(WHITE);
+    } else
         mount_is_ok = 1;
 
     if (mount_is_ok == 0) {
         while (1) {
             offset = 0;
-            fr = f_open(&fil, "logo.bin", FA_READ);
-            if (fr)
-                printf("open error: %d!\n\r", (int)fr);
-            f_lseek(&fil, offset);
-            fr = f_read(&fil, image, sizeof(image), &br);
-            LCD_ShowPicture(0, 0, 159, 39);
-            offset += 12800;
-            LEDB_TOG;
-            f_lseek(&fil, offset);
-            fr = f_read(&fil, image, sizeof(image), &br);
-            LCD_ShowPicture(0, 40, 159, 79);
-            LEDB_TOG;
-            delay_1ms(1500);
-            f_close(&fil);
-
-            fr = f_open(&fil, "bmp.bin", FA_READ);
+            // fr = f_open(&fil, "logo.bin", FA_READ);
+            // if (fr)
+            //     printf("open error: %d!\n\r", (int)fr);
+            // f_lseek(&fil, offset);
+            // fr = f_read(&fil, image, sizeof(image), &br);
+            // LCD_ShowPicture(0, 0, 159, 39);
+            // offset += 12800;
+            // LEDB_TOG;
+            // f_lseek(&fil, offset);
+            // fr = f_read(&fil, image, sizeof(image), &br);
+            // LCD_ShowPicture(0, 40, 159, 79);
+            // LEDB_TOG;
+            // delay_1ms(1500);
+            // f_close(&fil);
+            fr = f_open(&fil, "bmp1.bin", FA_READ);
             if (fr)
                 printf("open error: %d!\n\r", (int)fr);
             offset = 0;
 
-            for (int i = 0; i < 2189; i++) {
+            for (int i = 0; i < 929; i++) {
                 fr = f_read(&fil, image, sizeof(image), &br);
-                LCD_ShowPicture(0, 0, 159, 39);
-                offset += 12800;
+                LCD_ShowPicture(0, 0, 239, 44);
+                offset += 21600;
                 f_lseek(&fil, offset);
-                LEDB_TOG;
                 fr = f_read(&fil, image, sizeof(image), &br);
-                LCD_ShowPicture(0, 40, 159, 79);
-                offset += 12800;
+                LCD_ShowPicture(0, 45, 239, 89);
+                offset += 21600;
                 f_lseek(&fil, offset);
-                LEDB_TOG;
+                fr = f_read(&fil, image, sizeof(image), &br);
+                LCD_ShowPicture(0, 90, 239, 134);
+                offset += 21120;
+                f_lseek(&fil, offset);
             }
 
             /* Close the file */
