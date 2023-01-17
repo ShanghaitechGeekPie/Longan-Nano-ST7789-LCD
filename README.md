@@ -4,12 +4,14 @@
 
 ![1673944011035](image/README/1673944011035.png)
 
+![1673957897986](image/README/1673957897986.png)
+
 ## 进度
 
 * [X] 点亮
 * [X] 文字
 * [X] 图片
-* [X] ~~BadApple~~ 2077
+* [X] ~~BadApple~~ [2077](https://www.bilibili.com/video/BV1UK411r7nc/ "已上传Bilibili")
 * [X] 支持旋转
 * [X] 完全兼容原本函数
 * [ ] 外壳
@@ -19,6 +21,10 @@
 > 旋转后组件的位置可能存在细微的误差，没有完全测试，目测没啥问题
 >
 > 外壳因为官方没有提供新版Longan的文件，于是咕，顺便我也没学犀牛
+>
+> 请在熟悉[官方BadApple示例](https://longan.sipeed.com/zh/examples/badapple.html "官方Demo")后再食用本项目
+>
+> 演示视频 [https://www.bilibili.com/video/BV1UK411r7nc/](https://www.bilibili.com/video/BV1UK411r7nc/)
 
 ## 屏幕相关信息
 
