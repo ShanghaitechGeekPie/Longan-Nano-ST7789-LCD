@@ -86,7 +86,7 @@ typedef unsigned long u32;
 #define OLED_DATA 1  // Write data
 
 extern u16 BACK_COLOR;  // Background color
-extern unsigned char image[21440];
+extern unsigned char image[21601];
 
 void LCD_Writ_Bus(u8 dat);
 void LCD_WR_DATA8(u8 dat);

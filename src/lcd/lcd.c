@@ -620,7 +620,7 @@ void LCD_ShowNum1(u16 x, u16 y, float num, u8 len, u16 color) {
 void LCD_ShowPicture(u16 x1, u16 y1, u16 x2, u16 y2) {
     int i;
     LCD_Address_Set(x1, y1, x2, y2);
-    for (i = 0; i < 21440; i++) {
+    for (i = 0; i < 21601; i++) {
         // LCD_WR_DATA8(image[i*2+1]);
         LCD_WR_DATA8(image[i]);
     }
@@ -629,7 +629,7 @@ void LCD_ShowPicture(u16 x1, u16 y1, u16 x2, u16 y2) {
 void LCD_ShowLogo(void) {
     int i;
     LCD_Address_Set(0, 0, 239, 134);
-    for (i = 0; i < 25600; i++) {
+    for (i = 0; i < 21601; i++) {
         LCD_WR_DATA8(logo_bmp[i]);
     }
 }

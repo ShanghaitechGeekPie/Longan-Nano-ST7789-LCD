@@ -3,7 +3,7 @@
 #include "fatfs/tf_card.h"
 #include "lcd/lcd.h"
 
-unsigned char image[21440];
+unsigned char image[21601];
 FATFS fs;
 
 void init_uart0(void) {
@@ -47,8 +47,8 @@ int main(void) {
     init_uart0();
 
     Lcd_Init();  // init LCD
-    LCD_Clear(WHITE);
-    BACK_COLOR = WHITE;
+    LCD_Clear(BLACK);
+    BACK_COLOR = BLACK;
 
     LEDR(1);
     LEDG(1);
@@ -57,36 +57,20 @@ int main(void) {
     fr = f_mount(&fs, "", 1);
     if (fr == 0) {
         mount_is_ok = 0;
-        LCD_ShowString(24, 0, (u8 *)("card found!"), BLACK);
+        LCD_ShowString(24, 24, (u8 *)("card found!"), WHITE);
+        LCD_ShowString(48, 24, (u8 *)("Loading!"), BLUE);
         delay_1ms(1000);
-        LCD_ShowString(24, 0, (u8 *)("Loading!"), BLUE);
-        delay_1ms(1000);
-        LCD_Clear(WHITE);
+        LCD_Clear(BLACK);
     } else
         mount_is_ok = 1;
 
     if (mount_is_ok == 0) {
         while (1) {
             offset = 0;
-            // fr = f_open(&fil, "logo.bin", FA_READ);
-            // if (fr)
-            //     printf("open error: %d!\n\r", (int)fr);
-            // f_lseek(&fil, offset);
-            // fr = f_read(&fil, image, sizeof(image), &br);
-            // LCD_ShowPicture(0, 0, 159, 39);
-            // offset += 12800;
-            // LEDB_TOG;
-            // f_lseek(&fil, offset);
-            // fr = f_read(&fil, image, sizeof(image), &br);
-            // LCD_ShowPicture(0, 40, 159, 79);
-            // LEDB_TOG;
-            // delay_1ms(1500);
-            // f_close(&fil);
             fr = f_open(&fil, "bmp1.bin", FA_READ);
             if (fr)
                 printf("open error: %d!\n\r", (int)fr);
             offset = 0;
-
             for (int i = 0; i < 929; i++) {
                 fr = f_read(&fil, image, sizeof(image), &br);
                 LCD_ShowPicture(0, 0, 239, 44);
@@ -101,12 +85,11 @@ int main(void) {
                 offset += 21120;
                 f_lseek(&fil, offset);
             }
-
             /* Close the file */
             f_close(&fil);
         }
     } else {
-        LCD_ShowString(24, 0, (u8 *)("no card found!"), BLACK);
+        LCD_ShowString(24, 0, (u8 *)("no card found!"), WHITE);
         LCD_ShowString(24, 16, (u8 *)("no card found!"), BLUE);
         LCD_ShowString(24, 32, (u8 *)("no card found!"), BRED);
         LCD_ShowString(24, 48, (u8 *)("no card found!"), GBLUE);
