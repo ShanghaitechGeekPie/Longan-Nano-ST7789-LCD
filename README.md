@@ -1,6 +1,6 @@
 # Longan Nano ST7789LCD
 
- Testing Risc-V with new larger LCD
+ Testing with new larger LCD
 
 ![1673944011035](image/README/1673944011035.png)
 
